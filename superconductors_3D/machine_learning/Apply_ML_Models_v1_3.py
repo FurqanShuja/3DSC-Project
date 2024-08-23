@@ -433,21 +433,21 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         all_models['NNsk'] = NNsk
         print("Neural Network model added to all_models.")
         
-    ##################
-    # STACKED ENSEMBLE
-    ##################
     if 'StackedEnsemble' in use_models:
         print("Creating StackedEnsemble model...")
         
-    
-        
+        # Define base models
         base_models = [
             ('RF', all_models['RF']),
             ('XGB', all_models['XGB']),
         ]
         
-        # Define the meta-model
-        meta_model = ElasticNet(alpha=0.1, l1_ratio=0.5, random_state=42)
+        # Define the meta-model (Neural Network)
+        meta_model = MLPRegressor(hidden_layer_sizes=(50, 50), 
+                                activation='relu', 
+                                solver='adam', 
+                                alpha=0.01, 
+                                random_state=42)
         
         # Create the Stacked Ensemble model
         Stacked_Ensemble = StackingRegressor(
