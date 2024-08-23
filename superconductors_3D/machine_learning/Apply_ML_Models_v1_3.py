@@ -447,7 +447,6 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         base_models = [
             ('RF', all_models['RF']),
             ('XGB', all_models['XGB']),
-            ('NNsk', all_models['NNsk'])
         ]
         
         # Define the meta-model
