@@ -40,3 +40,26 @@ CatBoost_depth: 6
 # ElasticNet parameters
 ElasticNet_alpha: 1.0
 ElasticNet_l1_ratio: 0.5
+
+# TabNet parameters
+TabNet_n_d: 8  # Dimensionality of the decision prediction
+TabNet_n_a: 8  # Dimensionality of the attention embedding
+TabNet_n_steps: 3  # Number of steps in the network
+TabNet_gamma: 1.0  # Regularization parameter
+TabNet_lambda_sparse: 0.001  # Sparsity regularization
+TabNet_clip_value: 2.0  # Gradient clipping value
+TabNet_momentum: 0.3  # Momentum for batch normalization
+TabNet_virtual_batch_size: 128  # Batch size for ghost batch normalization
+TabNet_mask_type: 'sparsemax'  # Masking function ('sparsemax' or 'entmax')
+
+# NODE (Neural Oblivious Decision Ensembles) parameters
+NODE_num_layers: 3  # Number of layers in the network
+NODE_num_nodes: 64  # Number of nodes per layer
+NODE_learning_rate: 0.01  # Learning rate
+NODE_max_depth: 5  # Maximum depth of trees
+NODE_dropout_rate: 0.1  # Dropout rate for regularization
+NODE_batch_size: 256  # Batch size for training
+NODE_optimizer: 'adam'  # Optimizer ('adam', 'sgd', etc.)
+NODE_n_trees: 100  # Number of trees in the ensemble
+NODE_tree_depth: 6  # Depth of each tree in the ensemble
+NODE_lambda_l2: 1e-6  # L2 regularization coefficient
