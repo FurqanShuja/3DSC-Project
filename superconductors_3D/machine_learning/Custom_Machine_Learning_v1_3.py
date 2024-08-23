@@ -621,15 +621,16 @@ class Machine_Learning():
                 try:
                     # Check if return_std is specified and the model supports it
                     if 'return_std' in regr.get_params().keys():
-                        y_pred = regr.predict(x, return_std=True)
-                        pred = y_pred[0]
-                        std = y_pred[1]
-                    else:
-                        pred = regr.predict(x)
-                        std = None  # Or some other way to handle the absence of std
+                        y_pred, y_pred_std = regr.predict(x, return_std=True)
+                        
+                        # Calculate bounds if y_pred_std is available
+                        scaled_unc, y_pred_std_lower, y_pred_std_upper = y_pred_std
+                        assert (y_pred >= y_pred_std_lower).all() and (y_pred <= y_pred_std_upper).all(), 'Prediction not between uncertainty bounds.'
 
-                    scaled_unc, y_pred_std_lower, y_pred_std_upper = y_pred_std
-                    assert (y_pred >= y_pred_std_lower).all() and (y_pred <= y_pred_std_upper).all(), 'Prediction not between uncertainty bounds.'
+                    else:
+                        y_pred = regr.predict(x)
+                        y_pred_std = None  # Define y_pred_std as None when not applicable
+                        scaled_unc, y_pred_std_lower, y_pred_std_upper = None, None, None  # Set to None or handle appropriately
                       
                 except TypeError:
                     y_pred = regr.predict(x)
