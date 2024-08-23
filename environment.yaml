@@ -60,11 +60,13 @@ dependencies:
   - chardet=4.0.0
   - charset-normalizer=2.0.4
   - circus=0.17.1
+  - lightgbm
   - click=7.1.2
   - click-completion=0.5.2
   - click-config-file=0.6.0
   - click-spinner=0.1.10
   - cloudpickle=1.6.0
+  - catboost
   - colorama=0.4.4
   - colour=0.1.5
   - conda-pack=0.6.0

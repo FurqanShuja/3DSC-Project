@@ -27,3 +27,16 @@ RF_n_estimators: 200
 GB_n_estimators: 200
 GP_alpha: 0.3
 GP_lengthscale: 1
+# LightGBM parameters
+LightGBM_n_estimators: 1000
+LightGBM_learning_rate: 0.05
+LightGBM_num_leaves: 31
+
+# CatBoost parameters
+CatBoost_iterations: 1000
+CatBoost_learning_rate: 0.05
+CatBoost_depth: 6
+
+# ElasticNet parameters
+ElasticNet_alpha: 1.0
+ElasticNet_l1_ratio: 0.5

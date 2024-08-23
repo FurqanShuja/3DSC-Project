@@ -23,6 +23,9 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ExpSineSquared, WhiteKernel, ConstantKernel
 from sklearn.neighbors import KNeighborsRegressor
+from lightgbm import LGBMRegressor
+from catboost import CatBoostRegressor
+from sklearn.linear_model import ElasticNet
 from xgboost import XGBRegressor
 from sklearn.decomposition import PCA
 import random
@@ -354,6 +357,49 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     ####################    
     # 1 NEAREST NEIGHBOR
     ####################
+    if 'LightGBM' in use_models:
+        n_estimators = hparams.get("LightGBM_n_estimators", 1000)
+        learning_rate = hparams.get("LightGBM_learning_rate", 0.05)
+        num_leaves = hparams.get("LightGBM_num_leaves", 31)
+        
+        LightGBM = LGBMRegressor(
+            n_estimators=n_estimators, 
+            learning_rate=learning_rate, 
+            num_leaves=num_leaves, 
+            random_state=42
+        )
+        all_models['LightGBM'] = LightGBM
+
+    if 'CatBoost' in use_models:
+        iterations = hparams.get("CatBoost_iterations", 1000)
+        learning_rate = hparams.get("CatBoost_learning_rate", 0.05)
+        depth = hparams.get("CatBoost_depth", 6)
+        
+        CatBoost = CatBoostRegressor(
+            iterations=iterations, 
+            learning_rate=learning_rate, 
+            depth=depth, 
+            verbose=0, 
+            random_state=42
+        )
+        all_models['CatBoost'] = CatBoost
+
+    if 'ElasticNet' in use_models:
+        alpha = hparams.get("ElasticNet_alpha", 1.0)
+        l1_ratio = hparams.get("ElasticNet_l1_ratio", 0.5)
+        
+        ElasticNet_Model = ElasticNet(
+            alpha=alpha, 
+            l1_ratio=l1_ratio, 
+            random_state=42, 
+            max_iter=10000
+        )
+        
+        all_models['ElasticNet'] = ElasticNet_Model
+
+    
+
+    
     if '1NN' in use_models:
         Nearest_Neighbors = KNeighborsRegressor(n_neighbors=1)
         all_models['1NN'] = Nearest_Neighbors
@@ -886,7 +932,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['XGB']
+    use_models = ['LGBMRegressor']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
