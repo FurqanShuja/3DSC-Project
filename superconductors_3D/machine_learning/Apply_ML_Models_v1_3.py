@@ -11,6 +11,8 @@ import seaborn as sns
 import tensorflow as tf
 # import gpflow
 import pandas as pd
+from sklearn.ensemble import StackingRegressor
+from sklearn.linear_model import ElasticNet
 # import torch
 # import torch.nn as nn
 import sklearn
@@ -391,6 +393,31 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
             random_state=42
         )
         all_models['LightGBM'] = LightGBM
+
+        
+
+        if 'StackedEnsemble' in use_models:
+            # Define the base models
+            base_models = [
+                ('RF', all_models['RF']),
+                ('XGB', all_models['XGB']),
+                ('NNsk', all_models['NNsk'])
+            ]
+            
+            # Define the meta-model
+            meta_model = ElasticNet(alpha=0.1, l1_ratio=0.5, random_state=42)
+            
+            # Create the Stacked Ensemble model
+            Stacked_Ensemble = StackingRegressor(
+                estimators=base_models,
+                final_estimator=meta_model,
+                cv=5,        # 5-fold cross-validation
+                n_jobs=-1    # Use all available cores for parallel processing
+            )
+            
+            # Add the stacked ensemble model to all_models
+            all_models['StackedEnsemble'] = Stacked_Ensemble
+
 
     if 'CatBoost' in use_models:
         iterations = hparams.get("CatBoost_iterations", 1000)
@@ -954,7 +981,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['LightGBM']
+    use_models = ['StackedEnsemble']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
