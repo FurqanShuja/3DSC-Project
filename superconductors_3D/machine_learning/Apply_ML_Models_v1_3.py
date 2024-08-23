@@ -439,10 +439,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     if 'StackedEnsemble' in use_models:
         print("Creating StackedEnsemble model...")
         
-        # Ensure base models exist before creating StackedEnsemble
-        if 'RF' not in all_models or 'XGB' not in all_models or 'NNsk' not in all_models:
-            print("Error: Missing base models for StackedEnsemble.")
-            raise ValueError("One or more base models for StackedEnsemble are missing from all_models.")
+    
         
         base_models = [
             ('RF', all_models['RF']),
