@@ -514,8 +514,6 @@ class Machine_Learning():
         target_transformer = self.unique_transformer()
         regr = CustomTransformedTargetRegressor(regressor=pipe, transformer=target_transformer)
         
-        # Reshape y_train for TabNet or other models that require 2D targets
-        y_train = y_train.reshape(-1, 1)
         # Fit with domain and sample weights if possible.
         train_kwargs = {}
         if hasattr(model, 'domain_col'):
