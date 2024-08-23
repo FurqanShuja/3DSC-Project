@@ -28,8 +28,6 @@ from catboost import CatBoostRegressor
 from sklearn.linear_model import ElasticNet
 from xgboost import XGBRegressor
 from sklearn.decomposition import PCA
-from pytorch_tabnet.tab_model import TabNetRegressor
-from node import NODERegressor
 import random
 import yaml
 import datetime
@@ -360,41 +358,6 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     # 1 NEAREST NEIGHBOR
     ####################
 
-    if 'TabNet' in use_models:
-        # You can set hyperparameters for TabNet from hparams
-        n_d = hparams.get("TabNet_n_d", 8)  # Dimensionality of the decision prediction
-        n_a = hparams.get("TabNet_n_a", 8)  # Dimensionality of the attention embedding
-        n_steps = hparams.get("TabNet_n_steps", 3)  # Number of steps in the network
-        gamma = hparams.get("TabNet_gamma", 1.0)  # Regularization parameter
-        lambda_sparse = hparams.get("TabNet_lambda_sparse", 1e-3)  # Sparsity regularization
-
-        TabNet_Model = TabNetRegressor(
-            n_d=n_d,
-            n_a=n_a,
-            n_steps=n_steps,
-            gamma=gamma,
-            lambda_sparse=lambda_sparse,
-            seed=42
-        )
-
-        all_models['TabNet'] = TabNet_Model
-
-    if 'NODE' in use_models:
-        # Set hyperparameters for NODE from hparams
-        num_layers = hparams.get("NODE_num_layers", 3)  # Number of layers in the network
-        num_nodes = hparams.get("NODE_num_nodes", 64)  # Number of nodes per layer
-        learning_rate = hparams.get("NODE_learning_rate", 0.01)  # Learning rate
-        max_depth = hparams.get("NODE_max_depth", 5)  # Maximum depth of trees
-
-        NODE_Model = NODERegressor(
-            num_layers=num_layers,
-            num_nodes=num_nodes,
-            learning_rate=learning_rate,
-            max_depth=max_depth,
-            random_state=42
-        )
-
-        all_models['NODE'] = NODE_Model
 
     if 'LightGBM' in use_models:
         n_estimators = hparams.get("LightGBM_n_estimators", 1000)
