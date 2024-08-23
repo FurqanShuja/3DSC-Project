@@ -9,6 +9,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import seaborn as sns
 import tensorflow as tf
+from sklearn.linear_model import Ridge
 # import gpflow
 import pandas as pd
 from sklearn.ensemble import StackingRegressor
@@ -443,7 +444,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         ]
         
         # Define the meta-model (Neural Network)
-        meta_model = KNeighborsRegressor(n_neighbors=1)
+        meta_model = Ridge(alpha=1.0)
         
         # Create the Stacked Ensemble model
         Stacked_Ensemble = StackingRegressor(
