@@ -627,10 +627,13 @@ class Machine_Learning():
                         scaled_unc, y_pred_std_lower, y_pred_std_upper = y_pred_std
                         assert (y_pred >= y_pred_std_lower).all() and (y_pred <= y_pred_std_upper).all(), 'Prediction not between uncertainty bounds.'
 
+                        # Perform subscripting if scaled_unc is not None
+                        if scaled_unc is not None:
+                            scaled_unc = scaled_unc[:, idx]
+
                     else:
                         y_pred = regr.predict(x)
-                        y_pred_std = None  # Define y_pred_std as None when not applicable
-                        scaled_unc, y_pred_std_lower, y_pred_std_upper = None, None, None  # Set to None or handle appropriately
+                        scaled_unc = None  # Set to None or handle appropriately
                       
                 except TypeError:
                     y_pred = regr.predict(x)
