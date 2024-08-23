@@ -932,7 +932,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['LGBMRegressor']
+    use_models = ['LightGBM']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
