@@ -361,45 +361,95 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     # 1 NEAREST NEIGHBOR
     ####################
 
-    ####################    
-    # 1 NEAREST NEIGHBOR
-    ####################
-    if '1NN' in use_models:
-        print("Creating 1NN model...")
-        Nearest_Neighbors = KNeighborsRegressor(n_neighbors=1)
-        all_models['1NN'] = Nearest_Neighbors
-        print("1NN model added to all_models.")
+    if 'TabNet' in use_models:
+        # You can set hyperparameters for TabNet from hparams
+        n_d = hparams.get("TabNet_n_d", 8)  # Dimensionality of the decision prediction
+        n_a = hparams.get("TabNet_n_a", 8)  # Dimensionality of the attention embedding
+        n_steps = hparams.get("TabNet_n_steps", 3)  # Number of steps in the network
+        gamma = hparams.get("TabNet_gamma", 1.0)  # Regularization parameter
+        lambda_sparse = hparams.get("TabNet_lambda_sparse", 1e-3)  # Sparsity regularization
 
-    ###################
-    # RANDOM FOREST
-    ###################
+        TabNet_Model = TabNetRegressor(
+            n_d=n_d,
+            n_a=n_a,
+            n_steps=n_steps,
+            gamma=gamma,
+            lambda_sparse=lambda_sparse,
+            seed=42
+        )
+
+        all_models['TabNet'] = TabNet_Model
+
+
+    if 'LightGBM' in use_models:
+        n_estimators = hparams.get("LightGBM_n_estimators", 1000)
+        learning_rate = hparams.get("LightGBM_learning_rate", 0.05)
+        num_leaves = hparams.get("LightGBM_num_leaves", 31)
+        
+        LightGBM = LGBMRegressor(
+            n_estimators=n_estimators, 
+            learning_rate=learning_rate, 
+            num_leaves=num_leaves, 
+            random_state=42
+        )
+        all_models['LightGBM'] = LightGBM
+
+    ###############
+    # Random Forest
+    ###############
     if 'RF' in use_models:
-        print("Creating RandomForest model...")
-        n_trees = hparams.get("RF_n_estimators", 100)
+        n_trees = hparams["RF_n_estimators"]
         Random_Forest = RandomForestRegressor(n_estimators=n_trees)
         all_models['RF'] = Random_Forest
-        print("RandomForest model added to all_models.")
-    
-    ##################
-    # GRADIENT BOOSTING
-    ##################
+
+
+    ############################
+    # Gradient Boosting
+    ############################
     if 'GB' in use_models:
-        print("Creating GradientBoosting model...")
-        n_trees = hparams.get("GB_n_estimators", 100)
-        Gradient_Boosting = GradientBoostingRegressor(n_estimators=n_trees)
+        n_trees = hparams["GB_n_estimators"]
+        Gradient_Boosting =  GradientBoostingRegressor(n_estimators=n_trees)
         all_models['GB'] = Gradient_Boosting
-        print("GradientBoosting model added to all_models.")
     
-    ####################
-    # STACKED ENSEMBLE
-    ####################
+    #########
+    # XGBoost
+    #########
+    if 'XGB' in use_models:
+        XGBoost = XGBRegressor()
+        all_models['XGB'] = XGBoost   
+
+    ################
+    # Neural Network
+    ################
+    # Set some hyperparameter variables for the NN.
+    net_dims = ML.net_pattern(
+                                hparams['nn_layers'],
+                                hparams['nn_base_dim'],
+                                hparams['nn_end_dim']
+                                )
+    net_dims2 = ML.net_pattern(
+                                hparams['RGM_classifier_layers'],
+                                hparams['nn_end_dim'],
+                                hparams['nn_end_dim']
+                                )
+    net_dims = net_dims + net_dims2
+    if 'NNsk' in use_models:
+        NNsk = MLPRegressor(
+                            hidden_layer_sizes=net_dims,
+                            activation=hparams['nn_act'],
+                            solver='adam',
+                            max_iter=hparams["n_epochs"],
+                            early_stopping=True,
+                            validation_fraction=0.2,
+                            alpha=hparams["nn_l2"],
+                            batch_size=hparams['nn_batch_size'],
+                            learning_rate_init=hparams["learning_rate"],
+                            n_iter_no_change=hparams["nn_patience"]
+                            )
+        all_models['NNsk'] = NNsk 
+
     if 'StackedEnsemble' in use_models:
-        print("Creating StackedEnsemble model...")
-        
-        # Ensure base models exist before creating StackedEnsemble
-        if 'RF' not in all_models or 'XGB' not in all_models or 'NNsk' not in all_models:
-            raise ValueError("One or more base models for StackedEnsemble are missing from all_models.")
-        
+        # Define the base models
         base_models = [
             ('RF', all_models['RF']),
             ('XGB', all_models['XGB']),
@@ -419,23 +469,70 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         
         # Add the stacked ensemble model to all_models
         all_models['StackedEnsemble'] = Stacked_Ensemble
-        print("StackedEnsemble model added to all_models.")
 
 
-    ############################
-    # Gradient Boosting
-    ############################
-    if 'GB' in use_models:
-        n_trees = hparams["GB_n_estimators"]
-        Gradient_Boosting =  GradientBoostingRegressor(n_estimators=n_trees)
-        all_models['GB'] = Gradient_Boosting
+    if 'CatBoost' in use_models:
+        iterations = hparams.get("CatBoost_iterations", 1000)
+        learning_rate = hparams.get("CatBoost_learning_rate", 0.05)
+        depth = hparams.get("CatBoost_depth", 6)
+        
+        CatBoost = CatBoostRegressor(
+            iterations=iterations, 
+            learning_rate=learning_rate, 
+            depth=depth, 
+            verbose=0, 
+            random_state=42
+        )
+        all_models['CatBoost'] = CatBoost
+
+    if 'ElasticNet' in use_models:
+        alpha = hparams.get("ElasticNet_alpha", 1.0)
+        l1_ratio = hparams.get("ElasticNet_l1_ratio", 0.5)
+        
+        ElasticNet_Model = ElasticNet(
+            alpha=alpha, 
+            l1_ratio=l1_ratio, 
+            random_state=42, 
+            max_iter=10000
+        )
+        
+        all_models['ElasticNet'] = ElasticNet_Model
+
     
-    #########
-    # XGBoost
-    #########
-    if 'XGB' in use_models:
-        XGBoost = XGBRegressor()
-        all_models['XGB'] = XGBoost
+
+    
+    if '1NN' in use_models:
+        Nearest_Neighbors = KNeighborsRegressor(n_neighbors=1)
+        all_models['1NN'] = Nearest_Neighbors
+    
+    ###################
+    # LINEAR REGRESSION
+    ###################
+    if 'LR' in use_models:
+        Linear_Regression = sklearn.linear_model.LinearRegression()
+        all_models['LR'] = Linear_Regression
+  
+    
+
+        
+    # ###############
+    # # Lightning MLP
+    # ###############
+    # if 'NNL' in use_models:
+    #     NNL = MLP_Lightning.MLP(
+    #                         hidden_layer_sizes=net_dims,
+    #                         activation=hparams['nn_act'],
+    #                         solver='adam',
+    #                         n_epochs=hparams["n_epochs"],
+    #                         validation_fraction=0.2,
+    #                         alpha=hparams["nn_l2"],
+    #                         batch_size=hparams['nn_batch_size'],
+    #                         learning_rate=hparams["learning_rate"],
+    #                         patience=hparams["nn_patience"]
+    #                         )
+    #     all_models['NNL'] = NNL
+
+    
     
         
     ############################
