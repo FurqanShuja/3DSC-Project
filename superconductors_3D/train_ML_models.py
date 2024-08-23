@@ -46,7 +46,7 @@ def plot_learning_curve(runs, xticks, save_dir):
         all_scores = {'train_frac': [], 'features': [], score_name: [], 'mean': [], 'sem': []}
         for i in range(len(runs)):
             score_path = os.path.join(runs[i]['outdir'], all_scores_filename)
-            scores = All_scores(score_path).get_score_stats()['LightGBM']['tc'][score_name]
+            scores = All_scores(score_path).get_score_stats()['ElasticNet']['tc'][score_name]
             all_scores['train_frac'].append(runs[i]['train_frac'])
             all_scores['features'].append(runs[i]['features'])
             all_scores[score_name].append(score_name)
@@ -116,7 +116,7 @@ def train_model(features, args_from_fn, use_models, experiment, output_note, out
 
 def main(args_from_fn, database, n_cpus, n_reps=3, start_train_frac=0.1, end_train_frac=0.8, n_train_fracs=2):
 
-    use_models = ['LightGBM']
+    use_models = ['ElasticNet']
     output_note = ''
     outdirpath = projectpath('..', 'results', 'machine_learning')
     calcdir = projectpath('machine_learning')
