@@ -619,7 +619,15 @@ class Machine_Learning():
                 # The std is a tuple of upper and lower bound because it will usually not be symmetrical due to the scaling.
                 # The here called output `y_pred_std` is actually SIGMA * std (SIGMA is a global variable). This is so that one can dynamically change which degreee of uncertainty one wants. This is implemented in CustomTransformedTargetRegressor.
                 try:
-                    y_pred, y_pred_std = regr.predict(x, return_std=True)
+                    # Check if return_std is specified and the model supports it
+                    if 'return_std' in regr.get_params().keys():
+                        y_pred = regr.predict(x, return_std=True)
+                        pred = y_pred[0]
+                        std = y_pred[1]
+                    else:
+                        pred = regr.predict(x)
+                        std = None  # Or some other way to handle the absence of std
+
                     scaled_unc, y_pred_std_lower, y_pred_std_upper = y_pred_std
                     assert (y_pred >= y_pred_std_lower).all() and (y_pred <= y_pred_std_upper).all(), 'Prediction not between uncertainty bounds.'
                       
