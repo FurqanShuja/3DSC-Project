@@ -70,3 +70,8 @@ NODE_lambda_l2: 1e-6  # L2 regularization coefficient
 LogisticRegression_C: 1
 LogisticRegression_solver: "lbfgs"
 LogisticRegression_max_iter: 100
+
+SVR_C: 1.0
+SVR_epsilon: 0.1
+SVR_kernel: "rbf"
+SVR_gamma: 'scale'
