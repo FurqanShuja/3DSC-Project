@@ -38,7 +38,7 @@ CatBoost_learning_rate: 0.05
 CatBoost_depth: 6
 
 # ElasticNet parameters
-ElasticNet_alpha: 1.0
+ElasticNet_alpha: 0.001
 ElasticNet_l1_ratio: 0.5
 
 # TabNet parameters
