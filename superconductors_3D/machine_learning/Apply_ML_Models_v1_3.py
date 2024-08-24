@@ -364,7 +364,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     ####################
     # SUPPORT VECTOR REGRESSION (SVR)
     ####################
-    if 'SVR' in use_models:
+    if 'SVM' in use_models:
         C = hparams.get("SVR_C", 1.0)
         epsilon = hparams.get("SVR_epsilon", 0.1)
         kernel = hparams.get("SVR_kernel", "rbf")  # Common kernels: 'linear', 'poly', 'rbf', 'sigmoid'
