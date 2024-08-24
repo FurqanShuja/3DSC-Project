@@ -361,6 +361,19 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     ####################    
     # 1 NEAREST NEIGHBOR
     ####################
+
+    if 'ElasticNet' in use_models:
+        alpha = hparams.get("ElasticNet_alpha", 1.0)
+        l1_ratio = hparams.get("ElasticNet_l1_ratio", 0.5)
+        
+        ElasticNet_Model = ElasticNet(
+            alpha=alpha, 
+            l1_ratio=l1_ratio, 
+            random_state=42, 
+            max_iter=10000
+        )
+        
+        all_models['ElasticNet'] = ElasticNet_Model
     ###################
     # LINEAR REGRESSION
     ###################
@@ -492,18 +505,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         )
         all_models['CatBoost'] = CatBoost
 
-    if 'ElasticNet' in use_models:
-        alpha = hparams.get("ElasticNet_alpha", 1.0)
-        l1_ratio = hparams.get("ElasticNet_l1_ratio", 0.5)
-        
-        ElasticNet_Model = ElasticNet(
-            alpha=alpha, 
-            l1_ratio=l1_ratio, 
-            random_state=42, 
-            max_iter=10000
-        )
-        
-        all_models['ElasticNet'] = ElasticNet_Model
+    
 
     
 
