@@ -457,7 +457,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         
         # Define base models
         base_models = [
-            ('LR', all_models['LR']),
+            ('ElasticNet', all_models['ElasticNet']),
             ('XGB', all_models['XGB'])
             #('GPsk', all_models['GPsk'])
         ]
@@ -972,7 +972,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['XGB','LR', 'StackedEnsemble']
+    use_models = ['XGB','ElasticNet', 'StackedEnsemble']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
