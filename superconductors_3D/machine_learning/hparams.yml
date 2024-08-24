@@ -63,3 +63,10 @@ NODE_optimizer: 'adam'  # Optimizer ('adam', 'sgd', etc.)
 NODE_n_trees: 100  # Number of trees in the ensemble
 NODE_tree_depth: 6  # Depth of each tree in the ensemble
 NODE_lambda_l2: 1e-6  # L2 regularization coefficient
+
+
+# lOGISTIC REGRESSION
+
+LogisticRegression_C: 1
+LogisticRegression_solver: "lbfgs"
+LogisticRegression_max_iter: 100

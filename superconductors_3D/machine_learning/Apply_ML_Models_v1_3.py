@@ -374,6 +374,21 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         )
         
         all_models['ElasticNet'] = ElasticNet_Model
+
+    if 'LogisticRegression' in use_models:
+        C = hparams.get("LogisticRegression_C", 1.0)
+        solver = hparams.get("LogisticRegression_solver", "lbfgs")
+        max_iter = hparams.get("LogisticRegression_max_iter", 100)
+        
+        LogisticRegression_Model = sklearn.linear_model.LogisticRegression(
+            C=C,
+            solver=solver,
+            max_iter=max_iter,
+            random_state=42
+        )
+        
+        all_models['LogisticRegression'] = LogisticRegression_Model
+
     ###################
     # LINEAR REGRESSION
     ###################
@@ -471,8 +486,8 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         # Define base models
         base_models = [
             ('ElasticNet', all_models['ElasticNet']),
-            ('XGB', all_models['XGB'])
-            #('GPsk', all_models['GPsk'])
+            ('XGB', all_models['XGB']),
+            ('LogisticRegression', all_models['LogisticRegression'])
         ]
         
         # Define the meta-model (Neural Network)
@@ -974,7 +989,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['XGB','ElasticNet', 'StackedEnsemble']
+    use_models = ['XGB','ElasticNet','LogisticRegression', 'StackedEnsemble']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
