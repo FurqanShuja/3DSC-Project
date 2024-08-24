@@ -440,7 +440,8 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         # Define base models
         base_models = [
             ('RF', all_models['RF']),
-            ('XGB', all_models['XGB'])
+            ('XGB', all_models['XGB']),
+            ('GPsk', all_models['GPsk'])
         ]
         
         # Define the meta-model (Neural Network)
@@ -971,7 +972,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['RF', 'XGB', 'StackedEnsemble']
+    use_models = ['XGB','GPsk', 'StackedEnsemble']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
