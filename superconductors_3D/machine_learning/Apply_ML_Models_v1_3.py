@@ -363,8 +363,8 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     ####################
 
     if 'ElasticNet' in use_models:
-        alpha = hparams.get("ElasticNet_alpha", 1.0)
-        l1_ratio = hparams.get("ElasticNet_l1_ratio", 0.5)
+        alpha = hparams.get("ElasticNet_alpha", 0.01)
+        l1_ratio = hparams.get("ElasticNet_l1_ratio", 0.1)
         
         ElasticNet_Model = ElasticNet(
             alpha=alpha, 
