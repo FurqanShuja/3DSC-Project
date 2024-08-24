@@ -116,7 +116,7 @@ def train_model(features, args_from_fn, use_models, experiment, output_note, out
 
 def main(args_from_fn, database, n_cpus, n_reps=3, start_train_frac=0.1, end_train_frac=0.8, n_train_fracs=2):
 
-    use_models = ['XGB','RF','ElasticNet','SVR', 'StackedEnsemble']
+    use_models = ['XGB','RF','SVR', 'StackedEnsemble']
     output_note = ''
     outdirpath = projectpath('..', 'results', 'machine_learning')
     calcdir = projectpath('machine_learning')
