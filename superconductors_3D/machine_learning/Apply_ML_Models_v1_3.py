@@ -378,10 +378,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
             )
         
         # Incorporate feature scaling in the pipeline
-        all_models['SVR'] = Pipeline([
-            ('scaler', StandardScaler()),  # Feature scaling
-            ('svr', SVR_Model)
-        ])
+        all_models['SVR'] = SVR_Model
     ####################    
     # 1 NEAREST NEIGHBOR
     ####################
