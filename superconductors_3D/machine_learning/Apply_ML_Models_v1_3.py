@@ -373,7 +373,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         SVR_Model = sklearn.svm.LinearSVR(
                 C=C,
                 epsilon=epsilon,
-                max_iter=1000,  # Adjust as needed
+                max_iter=10000,  # Adjust as needed
                 random_state=42
             )
         
@@ -512,8 +512,14 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
             ('SVR', all_models['SVR'])
         ]
         
-        # Define the meta-model (Neural Network)
-        meta_model = GradientBoostingRegressor(n_estimators=100)
+        # Define the meta-model
+        meta_model = GradientBoostingRegressor(
+            n_estimators=100,
+            learning_rate=0.1,
+            max_depth=3,
+            random_state=42
+        )
+
         
         # Create the Stacked Ensemble model
         Stacked_Ensemble = StackingRegressor(
