@@ -440,12 +440,11 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         # Define base models
         base_models = [
             ('RF', all_models['RF']),
-            ('XGB', all_models['XGB']),
-            ('NNsk', all_models['NNsk'])
+            ('XGB', all_models['XGB'])
         ]
         
         # Define the meta-model (Neural Network)
-        meta_model = KNeighborsRegressor(n_neighbors=1)
+        meta_model = KNeighborsRegressor(n_neighbors=2)
         
         # Create the Stacked Ensemble model
         Stacked_Ensemble = StackingRegressor(
@@ -972,7 +971,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['RF', 'XGB','NNsk', 'StackedEnsemble']
+    use_models = ['RF', 'XGB', 'StackedEnsemble']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
