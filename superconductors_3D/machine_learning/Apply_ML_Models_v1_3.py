@@ -533,6 +533,15 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         all_models['StackedEnsemble'] = Stacked_Ensemble
         print("StackedEnsemble model added to all_models.")
 
+    # AdaBoost
+    if 'AdaBoost' in use_models:
+        base_model = sklearn.tree.DecisionTreeRegressor(max_depth=4)
+        AdaBoost_Model = sklearn.regressor.AdaBoostRegressor(base_model, n_estimators=100, random_state=42)
+        all_models['AdaBoost'] = AdaBoost_Model
+        print("AdaBoost model added to all_models.")
+
+        
+
 
     if 'CatBoost' in use_models:
         iterations = hparams.get("CatBoost_iterations", 1000)
@@ -1017,7 +1026,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['XGB','RF','ElasticNet','SVR', 'StackedEnsemble']
+    use_models = ['AdaBoost']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
