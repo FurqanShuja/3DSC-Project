@@ -1,6 +1,5 @@
 import warnings
 # warnings.filterwarnings("ignore")
-import sklearn.ensemble
 from sklearn.exceptions import ConvergenceWarning
 warnings.simplefilter("ignore", category=ConvergenceWarning)
 import os
@@ -368,15 +367,18 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     if 'SVR' in use_models:
         C = hparams.get("SVR_C", 1.0)
         epsilon = hparams.get("SVR_epsilon", 0.1)
-        kernel = hparams.get("SVR_kernel", "rbf")  # Common kernels: 'linear', 'poly', 'rbf', 'sigmoid'
+        kernel = hparams.get("SVR_kernel", "linear")  # Use 'linear' for faster computation
         gamma = hparams.get("SVR_gamma", 'scale')  # 'scale' or 'auto' or a float
 
-        SVR_Model = sklearn.svm.LinearSVR(
-                C=C,
-                epsilon=epsilon,
-                max_iter=10000,  # Adjust as needed
-                random_state=42
-            )
+        SVR_Model = SVR(
+            C=C,
+            epsilon=epsilon,
+            kernel=kernel,
+            gamma=gamma,
+            cache_size=200,  # Increase this if you have large datasets
+            max_iter=10000,  # You can set this to -1 for no limit
+            verbose=True     # Enable verbose for more logging, optional
+        )
         
         # Incorporate feature scaling in the pipeline
         all_models['SVR'] = SVR_Model
@@ -537,7 +539,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     # AdaBoost
     if 'AdaBoost' in use_models:
         base_model = sklearn.tree.DecisionTreeRegressor(max_depth=4)
-        AdaBoost_Model = sklearn.ensemble.AdaBoostRegressor(base_model, n_estimators=100, random_state=42)
+        AdaBoost_Model = sklearn.regressor.AdaBoostRegressor(base_model, n_estimators=100, random_state=42)
         all_models['AdaBoost'] = AdaBoost_Model
         print("AdaBoost model added to all_models.")
 
@@ -1027,7 +1029,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['AdaBoost']
+    use_models = ['XGB','RF','ElasticNet','SVR', 'StackedEnsemble']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
