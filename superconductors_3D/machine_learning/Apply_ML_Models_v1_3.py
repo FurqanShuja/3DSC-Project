@@ -439,7 +439,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         
         # Define base models
         base_models = [
-            ('RF', all_models['RF']),
+            # ('RF', all_models['RF']),
             ('XGB', all_models['XGB']),
             ('GPsk', all_models['GPsk'])
         ]
