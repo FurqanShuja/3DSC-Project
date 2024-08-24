@@ -370,7 +370,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         kernel = hparams.get("SVR_kernel", "linear")  # Use 'linear' for faster computation
         gamma = hparams.get("SVR_gamma", 'scale')  # 'scale' or 'auto' or a float
 
-        SVR_Model = SVR(
+        SVR_Model = sklearn.svm.SVR(
             C=C,
             epsilon=epsilon,
             kernel=kernel,
