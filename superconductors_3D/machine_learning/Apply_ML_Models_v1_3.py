@@ -358,6 +358,25 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     """Definitions of models that I regularly use.
     """
     all_models = {}
+
+    ###################
+    # SUPPORT VECTOR MACHINE (SVM)
+    ###################
+    if 'SVM' in use_models:
+        C = hparams.get("SVM_C", 1.0)
+        max_iter = hparams.get("SVM_max_iter", 1000)
+        tol = hparams.get("SVM_tol", 1e-4)
+
+        # LinearSVC is more suitable for large datasets
+        SVM_Model = sklearn.svm.LinearSVC(
+            C=C,
+            max_iter=max_iter,
+            tol=tol,
+            random_state=42,
+            dual=False  # Set dual=False when n_samples > n_features for faster computation
+        )
+
+        all_models['SVM'] = SVM_Model
     ####################    
     # 1 NEAREST NEIGHBOR
     ####################
@@ -487,7 +506,8 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         base_models = [
             ('ElasticNet', all_models['ElasticNet']),
             ('XGB', all_models['XGB']),
-            ('RF', all_models['RF'])
+            ('RF', all_models['RF']),
+            ('SVM', all_models['SVM'])
         ]
         
         # Define the meta-model (Neural Network)
@@ -989,7 +1009,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['XGB','RF','ElasticNet', 'StackedEnsemble']
+    use_models = ['XGB','RF','ElasticNet','SVM', 'StackedEnsemble']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
