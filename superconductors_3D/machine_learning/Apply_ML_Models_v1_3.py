@@ -361,7 +361,12 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     ####################    
     # 1 NEAREST NEIGHBOR
     ####################
-
+    ###################
+    # LINEAR REGRESSION
+    ###################
+    if 'LR' in use_models:
+        Linear_Regression = sklearn.linear_model.LinearRegression()
+        all_models['LR'] = Linear_Regression
     ############################
     # Gaussian Process
     ############################
@@ -452,9 +457,9 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         
         # Define base models
         base_models = [
-            # ('RF', all_models['RF']),
-            ('XGB', all_models['XGB']),
-            ('GPsk', all_models['GPsk'])
+            ('LR', all_models['LR']),
+            ('XGB', all_models['XGB'])
+            #('GPsk', all_models['GPsk'])
         ]
         
         # Define the meta-model (Neural Network)
@@ -507,12 +512,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         Nearest_Neighbors = KNeighborsRegressor(n_neighbors=1)
         all_models['1NN'] = Nearest_Neighbors
     
-    ###################
-    # LINEAR REGRESSION
-    ###################
-    if 'LR' in use_models:
-        Linear_Regression = sklearn.linear_model.LinearRegression()
-        all_models['LR'] = Linear_Regression
+    
   
     
 
@@ -972,7 +972,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['XGB','GPsk', 'StackedEnsemble']
+    use_models = ['XGB','LR', 'StackedEnsemble']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
