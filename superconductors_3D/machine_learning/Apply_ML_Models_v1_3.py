@@ -519,7 +519,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         meta_model = GradientBoostingRegressor(
             n_estimators=100,
             learning_rate=0.1,
-            max_depth=6,
+            max_depth=3,
             random_state=42
         )
 
