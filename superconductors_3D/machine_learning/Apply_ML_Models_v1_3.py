@@ -1,5 +1,6 @@
 import warnings
 # warnings.filterwarnings("ignore")
+import sklearn.ensemble
 from sklearn.exceptions import ConvergenceWarning
 warnings.simplefilter("ignore", category=ConvergenceWarning)
 import os
@@ -536,7 +537,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     # AdaBoost
     if 'AdaBoost' in use_models:
         base_model = sklearn.tree.DecisionTreeRegressor(max_depth=4)
-        AdaBoost_Model = sklearn.regressor.AdaBoostRegressor(base_model, n_estimators=100, random_state=42)
+        AdaBoost_Model = sklearn.ensemble.AdaBoostRegressor(base_model, n_estimators=100, random_state=42)
         all_models['AdaBoost'] = AdaBoost_Model
         print("AdaBoost model added to all_models.")
 
