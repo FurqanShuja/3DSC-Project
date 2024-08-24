@@ -364,7 +364,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     ####################
     # SUPPORT VECTOR REGRESSION (SVR)
     ####################
-    if 'SVM' in use_models:
+    if 'SVR' in use_models:
         C = hparams.get("SVR_C", 1.0)
         epsilon = hparams.get("SVR_epsilon", 0.1)
         kernel = hparams.get("SVR_kernel", "rbf")  # Common kernels: 'linear', 'poly', 'rbf', 'sigmoid'
@@ -512,7 +512,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
             ('ElasticNet', all_models['ElasticNet']),
             ('XGB', all_models['XGB']),
             ('RF', all_models['RF']),
-            ('SVM', all_models['SVM'])
+            ('SVR', all_models['SVR'])
         ]
         
         # Define the meta-model (Neural Network)
@@ -1014,7 +1014,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['XGB','RF','ElasticNet','SVM', 'StackedEnsemble']
+    use_models = ['XGB','RF','ElasticNet','SVR', 'StackedEnsemble']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
