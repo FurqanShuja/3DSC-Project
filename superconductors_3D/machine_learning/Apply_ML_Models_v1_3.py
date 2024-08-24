@@ -362,7 +362,20 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     # 1 NEAREST NEIGHBOR
     ####################
 
-    all_models = {}
+    ############################
+    # Gaussian Process
+    ############################
+    batch_size = 100
+    epochs = 1000
+    learning_rate = 0.1
+    n_inducing_points = 100
+    lengthscales = np.full(n_features, hparams['GP_lengthscale'])
+    noise = hparams["GP_alpha"]
+
+    if 'GPsk' in use_models:
+        kernel = ConstantKernel() * RBF(length_scale=lengthscales)
+        Gaussian_Process = GaussianProcessRegressor(kernel=kernel, alpha=noise**2, normalize_y=True)
+        all_models['GPsk'] = Gaussian_Process
     
     ####################    
     # 1 NEAREST NEIGHBOR
@@ -524,20 +537,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     
     
         
-    ############################
-    # Gaussian Process
-    ############################
-    batch_size = 100
-    epochs = 1000
-    learning_rate = 0.1
-    n_inducing_points = 100
-    lengthscales = np.full(n_features, hparams['GP_lengthscale'])
-    noise = hparams["GP_alpha"]
-
-    if 'GPsk' in use_models:
-        kernel = ConstantKernel() * RBF(length_scale=lengthscales)
-        Gaussian_Process = GaussianProcessRegressor(kernel=kernel, alpha=noise**2, normalize_y=True)
-        all_models['GPsk'] = Gaussian_Process
+    
     
     # kernel = gpflow.kernels.Constant() * gpflow.kernels.RBF(lengthscales=lengthscales)
     # if 'GPR' in use_models:
