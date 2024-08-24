@@ -491,7 +491,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         ]
         
         # Define the meta-model (Neural Network)
-        meta_model = GradientBoostingRegressor(n_estimators=200)
+        meta_model = GradientBoostingRegressor(n_estimators=500)
         
         # Create the Stacked Ensemble model
         Stacked_Ensemble = StackingRegressor(
