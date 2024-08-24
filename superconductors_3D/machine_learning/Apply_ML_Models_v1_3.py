@@ -6,6 +6,8 @@ import os
 warnings.simplefilter("ignore", category=FutureWarning)
 import sys
 import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 from matplotlib import pyplot as plt
 import seaborn as sns
 import tensorflow as tf
@@ -359,24 +361,27 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
     """
     all_models = {}
 
-    ###################
-    # SUPPORT VECTOR MACHINE (SVM)
-    ###################
-    if 'SVM' in use_models:
-        C = hparams.get("SVM_C", 1.0)
-        max_iter = hparams.get("SVM_max_iter", 1000)
-        tol = hparams.get("SVM_tol", 1e-4)
+    ####################
+    # SUPPORT VECTOR REGRESSION (SVR)
+    ####################
+    if 'SVR' in use_models:
+        C = hparams.get("SVR_C", 1.0)
+        epsilon = hparams.get("SVR_epsilon", 0.1)
+        kernel = hparams.get("SVR_kernel", "rbf")  # Common kernels: 'linear', 'poly', 'rbf', 'sigmoid'
+        gamma = hparams.get("SVR_gamma", 'scale')  # 'scale' or 'auto' or a float
 
-        # LinearSVC is more suitable for large datasets
-        SVM_Model = sklearn.svm.LinearSVC(
-            C=C,
-            max_iter=max_iter,
-            tol=tol,
-            random_state=42,
-            dual=False  # Set dual=False when n_samples > n_features for faster computation
-        )
-
-        all_models['SVM'] = SVM_Model
+        SVR_Model = sklearn.svm.LinearSVR(
+                C=C,
+                epsilon=epsilon,
+                max_iter=1000,  # Adjust as needed
+                random_state=42
+            )
+        
+        # Incorporate feature scaling in the pipeline
+        all_models['SVR'] = Pipeline([
+            ('scaler', StandardScaler()),  # Feature scaling
+            ('svr', SVR_Model)
+        ])
     ####################    
     # 1 NEAREST NEIGHBOR
     ####################
