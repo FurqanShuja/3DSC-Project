@@ -509,7 +509,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         
         # Define base models
         base_models = [
-            #('ElasticNet', all_models['ElasticNet'])
+            ('ElasticNet', all_models['ElasticNet']),
             ('XGB', all_models['XGB']),
             ('RF', all_models['RF']),
             ('SVR', all_models['SVR'])
@@ -519,7 +519,7 @@ def get_all_models(hparams, n_features, n_targets, use_models, n_domains=1, doma
         meta_model = GradientBoostingRegressor(
             n_estimators=100,
             learning_rate=0.1,
-            max_depth=3,
+            max_depth=6,
             random_state=42
         )
 
@@ -1029,7 +1029,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['XGB','RF','SVR', 'StackedEnsemble']
+    use_models = ['XGB','RF','ElasticNet','SVR', 'StackedEnsemble']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
