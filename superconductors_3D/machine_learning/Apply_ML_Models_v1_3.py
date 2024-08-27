@@ -33,7 +33,6 @@ from catboost import CatBoostRegressor
 from sklearn.linear_model import ElasticNet
 from xgboost import XGBRegressor
 from sklearn.decomposition import PCA
-from pytorch_tabnet.tab_model import TabNetRegressor
 import random
 import yaml
 import datetime
