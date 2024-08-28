@@ -23,7 +23,7 @@ def main(database, n_cpus):
     
     plot_dataset_statistics.main(database=database)
     
-    n_reps = 100 if database == 'MP' else 25   # TODO
+    n_reps = 1 if database == 'MP' else 25   # TODO
     start_train_frac = 0.1
     end_train_frac = 0.8
     n_train_fracs = 10
