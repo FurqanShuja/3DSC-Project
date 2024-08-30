@@ -1028,7 +1028,7 @@ def main(args_from_fn):
     # =============================================================================
 
     # use_models = ['1NN', 'LR', 'XGB', 'SVGP', 'NNsk', 'NN', 'RGM']
-    use_models = ['XGB','RF','ElasticNet','SVR', 'StackedEnsemble']
+    use_models = ['ElasticNet']
     experiment = ''
     add_params =  {
               #        'features': 'graph',
